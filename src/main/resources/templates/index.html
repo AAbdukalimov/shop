@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navbar::navbar}"></div>
+<br/>
+<div class="mx-auto" style="width: 1200px;" content="center">
+    <div class="container" th:each="product : ${products}">
+
+        <td><b><span th:text="${product.Id}" hidden></span></b></td>
+        <td><b><span th:text="${product.name}" style="color: #2423c6"></span></b></td>
+        <br>
+        <i class="fa fa-usd" aria-hidden="true" style="color: #2423c6"></i>
+        <td><b><span th:text="${product.price}" style="color: #2423c6"></span></b></td>
+        <br>
+        <b><a th:href="@{/carts/add-to-cart/{id}(id=${product.Id})}" type="button" class="btn btn-light"
+              style="font-size: larger">
+            <td><b><span style="font-size: small" th:text="add" th:color="green"></span></b>
+                <i class="fa fa-shopping-cart" aria-hidden="true" style="color: #02c623"></i>
+            </td>
+        </a></b>
+    </div>
+</div>
+<br>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <b> Total items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]] </b>
+        &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+        <b>  <li class="page-item">
+
+            <a class="page-link" th:if="${currentPage > 1}" th:href="@{/page/1}">First</a>
+            <span th:unless="${currentPage > 1}">First</span>    &nbsp; &nbsp;
+        </li></b>
+        <b><li class="page-item">
+            <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}}">Previous</a>
+            <span th:unless="${currentPage > 1}">Previous</span>    &nbsp; &nbsp;
+        </li></b>
+        <b><li class="page-item">
+                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+        </li></b>
+        <b><li class="page-item">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
+            <span th:unless="${currentPage < totalPages}">Next</span>   &nbsp; &nbsp;
+        </li></b>
+
+        <b><li class="page-item">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}}">Last</a>
+            <span th:unless="${currentPage < totalPages}">Last</span>
+        </li></b>
+    </ul>
+</nav>
+</body>
+<br><br><br><br/><br/><br/>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

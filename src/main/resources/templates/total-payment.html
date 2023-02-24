@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Total</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+
+    <div th:if="${param.logout}" class="alert alert-success" role="alert">
+        You have been logged out
+    </div>
+    <br><br>
+    <div class="mx-auto" style="width: 900px" align="center">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+<tr th:block th:each="item : ${items}">
+    <td><span th:text="${item.Id}" hidden></span></td>
+    <td><b><span th:text="${item.name}" style="color: cornflowerblue"></span></b></td>
+    <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b>  <span th:text="${item.price}" style="color: black"></span></b></td>
+    <td><b><span th:text="${item.quantity}" style="color: cornflowerblue"></span></b></td>
+    <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b>  <span th:text="${item.getAmount()}" style="color: black"></span></b></td>
+</tr>
+        </table>
+        <table>
+            <div class="container" th:object="${formattedTotal}">
+                <br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Total :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </b><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b> <input type="hidden" th:text="${formattedTotal}" style="color: black"></b>
+            </div>
+        </table>
+        <br/>
+        <form th:method="POST" th:action="@{/payments/create}" th:align="left">
+            <input type="submit" class="btn btn-success" style="font-size: unset" value="buy now">
+        </form><br/>
+        <b><a href="/carts" style="color: #2423c6">back to cart</a><br/></b>
+    </div>
+    </tbody>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

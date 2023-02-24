@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Login</title>
+    <style>
+        .error {
+            color: red;
+            font-style: italic;
+            font-size: small;
+            font-weight: bold;
+        }
+    </style>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+    <div class="mx-auto" style="text-align: center">
+        <br><br><br><br><br><br><br>
+        <div sec:authorize="isAnonymous()">
+            <form th:method="POST" th:action="@{/login}">
+
+                <p>
+                    <label for="userName">
+                        <td><b><span th:text="Username" style="color: cornflowerblue"></span></b></td>
+                        <i class="fa fa-user icon" style="color: brown"></i></label><br>
+                    <input type="text" minlength="3" maxlength="18" id="userName" name="userName"
+                           placeholder="User name">
+                </p>
+                <p>
+                    <label for="password">
+                        <td><b><span th:text="Password" style="color: cornflowerblue"></span></b></td>
+                        <i class="fa fa-key icon" style="color: brown"></i></label><br>
+                    <input type="password" minlength="8" maxlength="20" id="password"
+                           name="password" placeholder="Password">
+                </p>
+
+                <b>
+                    <button type="submit" class="btn btn-secondary">Log In</button>
+                </b>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>
+
