@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navbar::navbar}"></div>
+<br><br>
+<!--<h2>Welcome</h2>-->
+<div sec:authorize="isAnonymous()">
+    <p>Please login to continue</p>
+    <form th:method="POST" th:action="@{/login}">
+        <div> <label> Username <input type="text" name="username"/></label></div>
+        <div> <label> Password <input type="password" name="password"/></label></div>
+        <div><input type="submit" value="Login"></div>
+    </form>
+</div>
+
+<div class="mx-auto" style="width: 1200px;">
+    <table class="table">
+        <thead>
+        <tr style="color: darkgray">
+            <th scope="col">Id</th>
+            <th scope="col">Product name</th>
+            <th scope="col">Price  (<i class="fa fa-usd" aria-hidden="true" style="color: darkgray"></i>)</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:block th:each="product : ${products}">
+            <td><b><span th:text="${product.Id}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${product.name}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${product.price}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${product.quantity}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${product.amount}" style="color: cornflowerblue"></span></b></td>
+            <td>
+                <a th:href="@{/products/{id}/edit-product(id=${product.Id})}"
+                   class="btn btn-info" style="color: whitesmoke"
+                   type="button" data-toggle="tool-tip" data-placement="top" title="Update product">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td>
+                <form th:method="DELETE" th:action="@{/products/{id}(id=${product.Id})}">
+                    <input type="submit" class="btn btn-danger"
+                           data-toggle="tool-tip" data-placement="top" title="Delete product" value="delete">
+                </form>
+            </td>
+        </tr>
+        <td>
+            <a th:href="@{/products/add-product}"
+               class="btn btn-secondary" type="button" data-toggle="tool-tip" data-placement="top"
+               title="Add product"><i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </td>
+        </tbody>
+    </table>
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <b> Total items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]] </b>
+            &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+            <b>  <li class="page-item">
+
+                <a class="page-link" th:if="${currentPage > 1}" th:href="@{/products/page/1}">First</a>
+                <span th:unless="${currentPage > 1}">First</span>    &nbsp; &nbsp;
+            </li></b>
+            <b><li class="page-item">
+                <a th:if="${currentPage > 1}" th:href="@{'/products/page/' + ${currentPage - 1}}">Previous</a>
+                <span th:unless="${currentPage > 1}">Previous</span>    &nbsp; &nbsp;
+            </li></b>
+            <b><li class="page-item">
+                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/products/page/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+            </li></b>
+            <b><li class="page-item">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/products/page/' + ${currentPage + 1}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>   &nbsp; &nbsp;
+            </li></b>
+
+            <b><li class="page-item">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/products/page/' + ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </li></b>
+        </ul>
+    </nav>
+</div>
+</body>
+<br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Account</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{account-fragment/navbar-account::navbar-account}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 1200px;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">product</th>
+                <th scope="col">price</th>
+                <th scope="col">quantity</th>
+                <th scope="col">amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:block th:each="accountItem : ${accountItems}">
+                <td th:text="${accountItem.getProduct().getName()}"></td>
+                <td th:text="${accountItem.getProduct().getPrice()}"></td>
+                <td th:text="${accountItem.quantity}"></td>
+                <td th:text="${accountItem.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

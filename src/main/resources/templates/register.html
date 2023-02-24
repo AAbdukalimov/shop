@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Registration</title>
+    <style>
+        .error {
+            color: red;
+            font-style: italic;
+            font-size: small;
+            font-weight: bold;
+        }
+    </style>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 900px" align="center">
+        <br><br>
+        <form method="POST" th:action="@{/register}" th:object="${registrationRequest}">
+
+            <div th:if="${param.error}" class="alert alert-danger col-4" role="alert">
+                Invalid entered data
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                You have been logged out
+            </div>
+<!--            <div th:if="${#fields.hasAnyErrors()}">-->
+<!--                <ul>-->
+<!--                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger col-4"/>-->
+<!--                </ul>-->
+<!--            </div>-->
+            <p>
+                <label for="firstName">
+                    <td><b><span th:text="Firstname" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user-o" aria-hidden="true" style="color: brown"></i>
+                </label><br>
+                <input type="text" minlength="2" maxlength="30" th:field="*{firstName}" id="firstName"
+                       placeholder="First name">
+                <p><span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"> </span></p>
+            </p>
+            <p>
+                <label for="lastName">
+                    <td><b><span th:text="Lastname" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user-circle-o" aria-hidden="true" style="color: brown"></i></label><br>
+                <input type="text" minlength="2" maxlength="30" th:field="*{lastName}" id="lastName" placeholder="Last name">
+                <p><span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span></p>
+            </p>
+            <p>
+                <label for="userName">
+                    <td><b><span th:text="Username" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user icon" style="color: brown"></i>
+                </label><br>
+                <input type="text" minlength="3" maxlength="18" th:field="*{userName}" id="userName" name="userName" placeholder="User name">
+         <p><span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></span></p>
+            </p>
+            <p>
+                <label for="password">
+                    <td><b><span th:text="Password" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-key icon" style="color: brown"></i></label><br>
+                <input type="password" minlength="8" maxlength="20" th:field="*{password}" id="password" placeholder="Password">
+            <p><span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span></p>
+            </p>
+            <p>
+                <input type="submit" class="btn btn-secondary" value="Register">
+            </p>
+        </form>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

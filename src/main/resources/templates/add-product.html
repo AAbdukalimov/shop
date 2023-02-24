@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Add item</title>
+    <style>
+        .error {
+            color: red;
+            font-style: italic;
+            font-size: small;
+            font-weight: bold;
+        }
+    </style>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 900px" align="center">
+        <form th:method="POST" th:action="@{/products/create}" th:object="${productDto}">
+            <p>
+                <label for="name">Product name <i class="fa fa-archive" aria-hidden="true" style="color: darkgreen"></i></label><br/>
+                <input type="text" th:field="*{name}" id="name" placeholder="Product name">
+                <br>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
+            </p>
+            <p>
+                <label for="price">Price <i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></label></br>
+                <input type="text" th:field="*{price}" id="price" placeholder="Price">
+                <br>
+                <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error"></span>
+            </p>
+                    <p>
+                        <label for="quantity">Quantity <i class="fa fa-list-ol" aria-hidden="true" style="color: darkgreen"></i></label></br>
+                        <input type="number" th:field="*{quantity}" id="quantity" placeholder="Quantity">
+                        <br>
+                        <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="error"></span>
+                    </p>
+            <input type="submit" class="btn btn-secondary" value="Add product">
+        </form>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

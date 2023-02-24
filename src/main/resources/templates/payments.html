@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Payments</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navbar::navbar}"></div>
+<br><br>
+
+<div class="mx-auto" style="width: 1200px;">
+    <table class="table">
+        <thead>
+        <tr style="color: darkgray">
+            <th scope="col">Id</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">User id</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:block th:each="payment : ${allPayments}">
+            <td><b><span th:text="${payment.Id}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${payment.amount}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${payment.date}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${payment.getUser().getId()}" style="color: cornflowerblue"></span></b></td>
+
+            <td>
+                <form th:method="DELETE" th:action="@{/payments/{id}(id=${payment.Id})}">
+                    <input type="submit" class="btn btn-danger"
+                           data-toggle="tool-tip" data-placement="top" title="Delete payment" value="delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br><br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <b> Total items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]] </b>
+            &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+            <b>  <li class="page-item">
+
+                <a class="page-link" th:if="${currentPage > 1}" th:href="@{/payments/page/1}">First</a>
+                <span th:unless="${currentPage > 1}">First</span>    &nbsp; &nbsp;
+            </li></b>
+            <b><li class="page-item">
+                <a th:if="${currentPage > 1}" th:href="@{'/payments/page/' + ${currentPage - 1}}">Previous</a>
+                <span th:unless="${currentPage > 1}">Previous</span>    &nbsp; &nbsp;
+            </li></b>
+            <b><li class="page-item">
+                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{'/payments/page/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </span>
+            </li></b>
+            <b><li class="page-item">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/payments/page/' + ${currentPage + 1}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>   &nbsp; &nbsp;
+            </li></b>
+
+            <b><li class="page-item">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/payments/page/' + ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </li></b>
+        </ul>
+    </nav>
+</div>
+</body>
+<br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

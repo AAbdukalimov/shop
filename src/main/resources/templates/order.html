@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>Total</title>
+  <br><br>
+  <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+  <div th:insert="~{fragments/navbar::navbar}"></div>
+    <br/><br/>
+  <form th:method="GET" th:action="@{/items/check}" th:object="${order}" th:align="left">
+  <div class="mx-auto" style="width: 900px" align="center">
+    <table class="table">
+        <h1>Thanks for buying, <span th:text="${#httpServletRequest.remoteUser}"></span>!</h1>
+        <br/>
+      <thead>
+      <tr>
+        <th scope="col" style="color: darkgray">Product</th>
+        <th scope="col" style="color: darkgray">Price</th>
+        <th scope="col" style="color: darkgray">Quantity</th>
+        <th scope="col" style="color: darkgray">Amount</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:block th:each="item : ${order}">
+        <td><b><span th:text="${item.getProduct().getName()}" style="color: cornflowerblue"></span></b></td>
+        <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b>&nbsp;&nbsp;<b><span th:text="${item.getProduct().getPrice()}" style="color: black"></span></b></td>
+        <td><b><span th:text="${item.quantity}" style="color: cornflowerblue"></span></b></td>
+        <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b>&nbsp;&nbsp;<b><span th:text="${item.amount}" style="color: black"></span></b></td>
+      </tr>
+      </tbody>
+        <br/><br/>
+<tr>
+    <th scope="col" style="color: darkgray">Date and time of payment</th>
+</tr>
+        <tr th:object="${date}">
+          <td><b><i class="fa fa-calendar" aria-hidden="true" style="color: darkgreen"></i><span  lang="en" th:text="${date}"></span></b></td>
+        </tr>
+        <tr>
+            <th scope="col" style="color: darkgray">Total amount for order:</th>
+        </tr>
+        <tr th:object="${formatted}">
+            <td> <b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i><span th:text="${formatted}"></span> </b></td>
+        </tr>
+    </table>
+    <br/>
+  </div>
+  </form>
+</div>
+</body>
+<br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>
+
+
+

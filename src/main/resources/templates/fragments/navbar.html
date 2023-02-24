@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Navbar</title>
+</head>
+<body>
+<div th:fragment="navbar" align="center">
+    <script>
+        function digitalClock() {
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            if (hours < 10) hours = "0" + hours;
+            if (minutes < 10) minutes = "0" + minutes;
+            if (seconds < 10) seconds = "0" + seconds;
+            document.getElementById("id_clock").innerHTML = hours + ":" + minutes + ":" + seconds;
+            setTimeout("digitalClock()", 1000);
+        }
+    </script>
+    <body>
+    <b>
+        <div id="id_clock" style="color: #766bc6" aria-controls=""></div>
+    </b>
+    <script>digitalClock();</script>
+    <br>
+    </body>
+    <nav class="nav nav-pills nav-justified" style="font-size: x-large">
+        <a class="navbar-brand" th:href="@{/static}"></a>
+        <a href="/" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Main"
+           style="color: #0086c6">
+            <i class="fa fa-home" aria-hidden="true" style="color: #0086c6"></i><br/>
+            Main</a>
+        <div sec:authorize="hasRole('USER')">
+            <a href="/carts" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Cart"
+              style="color: #0086c6">
+                <td th:object="${numberOfCartProduct}"></td>
+                <span th:text="${numberOfCartProduct}" style="color: #c60110"></span>
+                <i class="fa fa-shopping-cart" aria-hidden="true" style="color: #02c600"></i> <br/>
+                Cart</a>
+        </div>
+        <div sec:authorize="hasRole('USER')">
+            <a href="/account" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top"
+               title="User account"
+               style="color: #0086c6">
+                <i class="fa fa-user-o" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Account</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+        <a href="/products" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Products"
+           style="color: #0086c6">
+            <i class="fa fa-archive" aria-hidden="true" style="color: #0086c6"></i><br/>
+            Stock</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+            <a href="/users" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Users"
+               style="color: #0086c6">
+                <i class="fa fa-users" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Users</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+            <a href="/items" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Items"
+               style="color: #0086c6">
+                <i class="fa fa-archive" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Items</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')">
+            <a href="/payments" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Payments"
+               style="color: #0086c6">
+                <i class="fa fa-usd" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Payments</a>
+        </div>
+
+                <div sec:authorize="hasRole('ADMIN')">
+        <a href="/admin" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top"
+           title="Admin"
+           style="color: #0086c6">
+            <i class="fa fa-user-o" aria-hidden="true" style="color: #0086c6"></i><br/>
+            Admin</a>
+                </div>
+        <div sec:authorize="isAnonymous()">
+            <a href="/login" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top" title="Log in"
+               style="color: #0086c6">
+                <i class="fa fa-sign-in" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Log In</a>
+        </div>
+        <div sec:authorize="isAnonymous()">
+            <a href="/register" class="nav-link" type="button" data-toggle="tool-tip" data-placement="top"
+               title="Sign up" style="color: #0086c6">
+                <i class="fa fa-user-plus" aria-hidden="true" style="color: #0086c6"></i><br/>
+                Sign up</a>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post">
+                                <div class="form-actions">
+                <i class="fa fa-sign-out" aria-hidden="true" style="color: #0086c6"></i>
+                <button type="submit" class="btn" style="color: #0086c6">Logout</button>
+                                </div>
+            </form>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

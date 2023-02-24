@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navbar::navbar}"></div>
+<br><br>
+<div class="mx-auto" style="width: 900px" align="center"><br/><br/><br/>
+    <h1 style="color: cornflowerblue">Hello  <span th:text="${#httpServletRequest.remoteUser}" style="color: #c60917"></span>
+        <h2 style="color: cornflowerblue">Something went wrong! </h2><br/>
+        <h2 style="color: cornflowerblue">This page does not exist or you are denied access</h2>
+    </h1><br/>
+   <b><a href="/" style="color: #171cc6">Go Main</a></b>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>

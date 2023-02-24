@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit item</title>
+    <style>
+        .error {
+            color: red;
+            font-style: italic;
+            font-size: small;
+            font-weight: bold;
+        }
+    </style>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 900px" align="center">
+        <form th:method="PATCH" th:action="@{/account}" th:object="${user}" >
+
+                <p hidden>
+                    <label for="id">
+                        <td><b><span th:text="Id" style="color: cornflowerblue"></span></b></td>
+                        <i class="fa fa-user-o" aria-hidden="true" style="color: brown"></i></label><br>
+                    <input type="number" minlength="1" maxlength="12" th:field="*{id}" id="id" placeholder="Id">
+                    <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="error"> </span>
+                </p>
+            <p>
+                <label for="firstName">
+                    <td><b><span th:text="Firstname" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user-o" aria-hidden="true" style="color: brown"></i></label><br>
+                <input type="text" minlength="2" maxlength="30" th:field="*{firstName}" id="firstName" placeholder="First name">
+                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"> </span>
+            </p>
+            <p>
+                <label for="lastName">
+                    <td><b><span th:text="Lastname" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user-circle-o" aria-hidden="true" style="color: brown"></i></label><br>
+                <input type="text" minlength="2" maxlength="30" th:field="*{lastName}" id="lastName" placeholder="Last name">
+                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
+            </p>
+            <p>
+                <label for="userName">
+                    <td><b><span th:text="Username" style="color: cornflowerblue"></span></b></td>
+                    <i class="fa fa-user icon" style="color: brown"></i>
+                </label><br>
+                <input type="text" minlength="5" maxlength="30" th:field="*{userName}" id="userName" placeholder="User name">
+                <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="error"></span>
+            </p>
+            <p hidden>
+                <label for="role">
+                    <b><span th:text="Role" style="color: cornflowerblue"></span></b>
+                    <i class="fa fa-user-o" aria-hidden="true" style="color: brown"></i></label><br>
+                <input type="hidden" th:field="*{role}" id="role">
+                <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error"> </span>
+            </p>
+            <p>
+                <label for="password">
+                    <b><span th:text="Password" style="color: cornflowerblue"></span></b>
+                    <i class="fa fa-key icon" style="color: brown"></i></label><br>
+                <input type="password" minlength="8" maxlength="30" th:field="*{password}" id="password" placeholder="Password">
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
+            </p>
+                     <input type="submit" class="btn btn-secondary" value="Update">
+        </form>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>
