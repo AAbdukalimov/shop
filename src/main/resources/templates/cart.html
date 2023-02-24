@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{fragments/navbar::navbar}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 900px" align="center">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" hidden>Id</th>
+                <th scope="col">Product name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:block th:each="product : ${cart}" >
+                <td hidden><span th:text="${product.Id}" style="color: cornflowerblue" hidden></span></td>
+                <td><b><span th:text="${product.getName()}" style="color: cornflowerblue"></span></b></td>
+                <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b>  <span th:text="${product.getPrice()}" style="color: black"></span></b></td>
+                <td><b><span th:text="${product.getQuantity()}" style="color: cornflowerblue"></span></b></td>
+                <td><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b>  <span th:text="${product.getAmount()}" style="color: black"></span></b></td>
+                <td>
+                    <a th:href="@{/carts/{id}/edit-cart-product(id=${product.Id})}"
+                       class="btn btn-warning" style="font-size: unset"
+                       type="button" data-toggle="tool-tip" data-placement="top" title="Update cart">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td>
+                    <form th:method="DELETE" th:action="@{/carts/{id}(id=${product.Id})}">
+                        <input type="submit" class="btn btn-danger" title="delete position" value="delete">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+            <td>
+                <a th:href="@{/index}"
+                   class="btn btn-secondary" type="button" data-toggle="tool-tip" data-placement="top"
+                   title="more"><i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            <td/>
+        </table>
+        <table>
+            <div class="container" th:object="${formattedTotal}">
+                <b>Total amount:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </b><b><i class="fa fa-usd" aria-hidden="true" style="color: darkgreen"></i></b><b> <input type="hidden" th:text="${formattedTotal}" style="color: black"></b>
+            </div>
+        </table>
+        <br/>
+        <form th:method="POST" th:action="@{/payments/create}" th:align="left">
+            <input type="submit" class="btn btn-success" style="font-size: unset" value="Buy now">
+        </form>
+    </div>
+
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>
+
+

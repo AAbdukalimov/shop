@@ -1,0 +1,35 @@
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Account</title>
+    <br><br>
+    <div th:insert="~{fragments/bootstrap::bootstrap}"></div>
+</head>
+<body>
+<div class="container">
+    <div th:insert="~{account-fragment/navbar-account::navbar-account}"></div>
+    <br><br>
+    <div class="mx-auto" style="width: 1200px;">
+        <!--user-->
+        <div class="h5"></div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:block th:each="accountPayment : ${accountPayments}">
+                <td th:text="${accountPayment.amount}"></td>
+                <td th:text="${accountPayment.date}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div th:insert="~{fragments/footer::footer}"></div>
+</html>
