@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.http.HttpSession;
 import java.util.Set;
+
 import static com.example.shop.util.Constants.CREATE;
 import static com.example.shop.util.Constants.CURRENT_PAGE;
 import static com.example.shop.util.Constants.ID;
@@ -48,6 +50,7 @@ public class PaymentController {
         return itemController.create();
     }
 
+
     @GetMapping(PAGE_PATH)
     public String findAll(Model model, @PathVariable(PAGE_NUMBER) int currentPage) {
         Page<Payment> page = paymentService.findPage(currentPage);
@@ -58,15 +61,16 @@ public class PaymentController {
         return "payments";
     }
 
-    @DeleteMapping(PATH_ID)
-    public String delete(@PathVariable(value = ID) Long id) {
-        paymentService.deleteById(id);
-        return "payments";
-    }
-
     @GetMapping()
     public String getAllPages(Model model) {
         return findAll(model, 1);
     }
+
+    @DeleteMapping(PATH_ID)
+    public String deleteById(@PathVariable(value = ID) Long id) {
+        paymentService.deleteById(id);
+        return "redirect:/payments";
+    }
+
 
 }
