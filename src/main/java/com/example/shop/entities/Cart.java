@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,5 +34,18 @@ public class Cart  {
     @JsonIgnore
     @ToString.Exclude
     private Product product;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return Objects.equals(id, cart.id) && Objects.equals(product, cart.product);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, product);
+    }
 
 }

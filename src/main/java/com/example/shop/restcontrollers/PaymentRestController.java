@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,11 +27,14 @@ import java.util.List;
 public class PaymentRestController {
 
     private PaymentService paymentService;
+    private HttpSession session;
 
     @PostMapping()
     @Operation(summary = "Create payment")
     @ResponseStatus(HttpStatus.CREATED)
     public Payment create(@Valid @RequestBody PaymentDto paymentDto) {
+       Double total = (Double) session.getAttribute("total");
+       paymentDto.setAmount(total);
         return paymentService.create(paymentService.toPayment(paymentDto));
     }
 

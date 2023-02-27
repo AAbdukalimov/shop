@@ -2,9 +2,9 @@ package com.example.shop.controllers;
 
 import com.example.shop.dto.authorize.RegistrationRequest;
 import com.example.shop.entities.User;
+import com.example.shop.exceptions.LoginExistException;
 import com.example.shop.service.user.UserService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
-@Slf4j
 @Controller
 @AllArgsConstructor
 public class PublicController {
@@ -38,12 +37,12 @@ public class PublicController {
     @PostMapping("/register")
     public String register(@Valid RegistrationRequest registrationRequest, BindingResult bindingResult) {
         if (!userService.userNameUniqCheck(registrationRequest.getUserName())) {
-            return "login-exist";
+            throw new LoginExistException("This user name already exist!");
         }
         if (bindingResult.hasErrors()) {
             return "register";
         }
-                 userService.create(User.builder()
+        userService.create(User.builder()
                 .firstName(registrationRequest.getFirstName())
                 .lastName(registrationRequest.getLastName())
                 .userName(registrationRequest.getUserName())

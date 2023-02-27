@@ -75,7 +75,7 @@ public class CartServiceImplTest {
 
     @Test
     public void testAddToCart() {
-        Product actual = cartService.addToCart(firstProduct);
+        Product actual = cartService.addToCart(firstProduct, cart);
         assertEquals(firstCartProduct, actual);
     }
 
@@ -90,7 +90,7 @@ public class CartServiceImplTest {
     public void testFindById() {
         when((Set<Product>) session.getAttribute("cart")).thenReturn(cart);
         Product expected = firstCartProduct;
-        Product actual = cartService.findById(firstCartProduct.getId());
+        Product actual = cartService.findById(firstCartProduct.getId(), cart);
         assertEquals(expected, actual);
     }
 

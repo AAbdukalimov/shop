@@ -1,5 +1,6 @@
 package com.example.shop.restcontrollers;
 
+import com.example.shop.entities.Cart;
 import com.example.shop.entities.Product;
 import com.example.shop.service.cart.CartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Set;
 import static com.example.shop.util.Constants.*;
@@ -30,41 +33,49 @@ public class CartRestController {
 
     private final CartService cartService;
 
+    private HttpSession session;
+
+    private Set<Product>cart;
+
+    public Set<Product>getCart(){
+     return cart = (Set<Product>) session.getAttribute("cart");
+    }
+
     @PostMapping()
     @Operation(summary = "Add product to cart")
     @ResponseStatus(HttpStatus.CREATED)
     public Product addToCart(@Valid @RequestBody Product product) {
-        return cartService.addToCart(product);
+        return cartService.addToCart(product, cart);
     }
 
     @GetMapping()
     @Operation(summary = "Find all cart products")
     @ResponseStatus(HttpStatus.OK)
     public Set<Product> findAll() {
-        return cartService.findAll();
+        return cartService.findAll(cart);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Find cart product by id")
     @ResponseStatus(HttpStatus.OK)
     public Product findById(@PathVariable Long id) {
-        return cartService.findById(id);
+        return cartService.findById(id, cart);
     }
 
-    @PatchMapping(PATH_ID)
+    @PatchMapping("/{id}")
     @Operation(summary = "Update cart product")
     @ResponseStatus(HttpStatus.OK)
     public Product update(@Valid @RequestBody @PathVariable(value = ID) Long id, Integer quantity) {
-        Product product = cartService.findById(id);
+        Product product = cartService.findById(id, cart);
         product.setQuantity(quantity);
-        return cartService.update(product);
+        return cartService.update(product, cart);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete cart product by id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@Valid @RequestBody @PathVariable(value = "id") Long id) {
-        cartService.deleteById(id);
+        cartService.deleteById(id, cart);
     }
 
 }

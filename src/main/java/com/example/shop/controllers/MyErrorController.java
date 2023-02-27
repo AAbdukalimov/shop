@@ -22,4 +22,8 @@ public class MyErrorController implements ErrorController {
         return "login-exist";
     }
 
+    @RequestMapping("/products-quantity-error")
+    public String productsQuantityError(){
+        return "products-quantity-error";
+    }
 }

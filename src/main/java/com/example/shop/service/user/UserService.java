@@ -3,6 +3,7 @@ package com.example.shop.service.user;
 import com.example.shop.dto.UserDto;
 import com.example.shop.entities.User;
 import org.springframework.data.domain.Page;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -18,5 +19,6 @@ public interface UserService {
     Boolean userNameUniqCheck(String userName);
     User toUser(UserDto userDto);
     Page<User> findPage(int currentPage);
+    void showPage(Model model, int currentPage);
 
 }

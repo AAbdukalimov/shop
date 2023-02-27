@@ -9,11 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.webjars.NotFoundException;
-
 import java.util.List;
 import java.util.Set;
-
+import static com.example.shop.util.Constants.CURRENT_PAGE;
+import static com.example.shop.util.Constants.TOTAL_ITEMS;
+import static com.example.shop.util.Constants.TOTAL_PAGES;
 import static com.example.shop.util.Constants.ZERO;
 
 @Slf4j
@@ -38,11 +40,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        return productRepository.findAll();
+        List<Product> all = productRepository.findAll();
+        for (Product product : all) {
+            setAmount(product);
+        }
+        return all;
     }
 
     @Override
     public Product update(Product product) {
+        setAmount(product);
         return productRepository.save(product);
     }
 
@@ -96,11 +103,21 @@ public class ProductServiceImpl implements ProductService {
             for (Product cartProduct : cartProducts) {
                 if (stock.getId().equals(cartProduct.getId())) {
                     stock.setQuantity(stock.getQuantity() - cartProduct.getQuantity());
+                    setAmount(stock);
                     productRepository.save(stock);
                 }
             }
         }
         return stocks;
+    }
+
+    @Override
+    public void showPage(Model model, int currentPage) {
+        Page<Product> page = findPage(currentPage);
+        model.addAttribute(CURRENT_PAGE, currentPage);
+        model.addAttribute(TOTAL_PAGES, page.getTotalPages());
+        model.addAttribute(TOTAL_ITEMS, page.getTotalElements());
+        model.addAttribute("products", page.getContent());
     }
 
 }

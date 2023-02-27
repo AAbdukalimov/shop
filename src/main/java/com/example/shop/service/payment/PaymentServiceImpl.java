@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,13 +23,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     private PaymentRepository paymentRepository;
     private UserService userService;
-    private HttpSession session;
 
 
     @Override
     @Transactional
     public Payment create(Payment payment) {
-        payment.setAmount((Double)session.getAttribute("total"));
         payment.setUser(userService.findByUserName(userService.getCurrentUsername()));
         payment.setDate(LocalDateTime.now());
         return paymentRepository.save(payment);
@@ -72,8 +69,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment toPayment(PaymentDto paymentDto) {
         return Payment.builder()
-                .amount((Double)session.getAttribute("total"))
+                .amount(paymentDto.getAmount())
                 .date(paymentDto.getDate())
                 .build();
     }
+
 }

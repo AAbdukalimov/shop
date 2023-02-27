@@ -42,6 +42,13 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
                 <input type="number" th:field="*{quantity}" style="color: black" id="quantity" placeholder="Quantity">
                 <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="error"></span>
             </p>
+            <p>
+                <label for="amount">
+                    <td><b><span th:text="Amount" style="color: blueviolet"></span></b></td>
+                    <i class="fa fa-list-ol" aria-hidden="true" style="color: darkgreen"></i></label><br>
+                <input type="number" th:field="*{amount}" style="color: black" id="amount" placeholder="Amount" readonly>
+                <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="error"></span>
+            </p>
             <input type="submit" class="btn btn-secondary" value="Update">
         </form>
     </div>

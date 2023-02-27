@@ -4,7 +4,6 @@ import com.example.shop.dto.ProductDto;
 import com.example.shop.entities.Product;
 import com.example.shop.service.product.ProductService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 import static com.example.shop.util.Constants.*;
+
 @Controller
 @RequestMapping("/products")
 @AllArgsConstructor
@@ -20,13 +20,13 @@ public class ProductsController {
 
     private ProductService productService;
 
-    @PostMapping(CREATE)
-    public String createItem(@ModelAttribute("productDto") @Valid ProductDto productDto, BindingResult bindingResult) {
+    @PostMapping("/create")
+    public String createProduct(@ModelAttribute("productDto") @Valid ProductDto productDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "add-product";
         }
         productService.create(productService.toProduct(productDto));
-        return REDIRECT_TO_PRODUCT;
+        return "redirect:/products";
     }
 
     @GetMapping("/add-product")
@@ -35,35 +35,29 @@ public class ProductsController {
         return "add-product";
     }
 
-    @GetMapping(PAGE_PATH)
-    public String findAll(Model model, @PathVariable(PAGE_NUMBER) int currentPage) {
-        Page<Product> page = productService.findPage(currentPage);
-
-        model.addAttribute(CURRENT_PAGE, currentPage);
-        model.addAttribute(TOTAL_PAGES, page.getTotalPages());
-        model.addAttribute(TOTAL_ITEMS, page.getTotalElements());
-        model.addAttribute("products", page.getContent());
-
+    @GetMapping("/page/{pageNumber}")
+    public String findAll(Model model, @PathVariable("pageNumber") int currentPage) {
+        productService.showPage(model, currentPage);
         return "product";
     }
 
     @GetMapping()
-    public String getAllPages(Model model){
+    public String getAllPages(Model model) {
         return findAll(model, 1);
     }
 
-    @GetMapping(PATH_ID)
+    @GetMapping("/{id}")
     public Product findById(@PathVariable(value = ID) Long id) {
         return productService.findById(id);
     }
 
-    @PatchMapping(PATH_ID)
+    @PatchMapping("/{id}")
     public String update(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "edit-product";
         }
         productService.update(product);
-        return REDIRECT_TO_PRODUCT;
+        return "redirect:/products";
     }
 
     @GetMapping("/{id}/edit-product")
@@ -72,10 +66,10 @@ public class ProductsController {
         return "edit-product";
     }
 
-    @DeleteMapping(PATH_ID)
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable(value = ID) Long id) {
         productService.deleteById(id);
-        return REDIRECT_TO_PRODUCT;
+        return "redirect:/products";
     }
 
     @GetMapping("/productsStockAdjustments")

@@ -2,10 +2,11 @@ package com.example.shop.controllers;
 
 import com.example.shop.entities.Payment;
 import com.example.shop.entities.Product;
+import com.example.shop.facade.payment.PaymentFacadeImpl;
+import com.example.shop.service.cart.CartService;
 import com.example.shop.service.payment.PaymentService;
-import com.example.shop.service.product.ProductService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,47 +18,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 import java.util.Set;
 
-import static com.example.shop.util.Constants.CREATE;
-import static com.example.shop.util.Constants.CURRENT_PAGE;
 import static com.example.shop.util.Constants.ID;
-import static com.example.shop.util.Constants.PAGE_NUMBER;
-import static com.example.shop.util.Constants.PAGE_PATH;
-import static com.example.shop.util.Constants.PATH_ID;
-import static com.example.shop.util.Constants.REDIRECT_TO_PRODUCT;
-import static com.example.shop.util.Constants.TOTAL_ITEMS;
-import static com.example.shop.util.Constants.TOTAL_PAGES;
 
+@Slf4j
 @Controller
 @RequestMapping("/payments")
 @AllArgsConstructor
 public class PaymentController {
 
+    private PaymentFacadeImpl paymentFacade;
     private PaymentService paymentService;
-    private ProductService productService;
+    private CartService cartService;
     private ItemController itemController;
     private HttpSession session;
+    private Set<Product> cart;
 
 
-    @PostMapping(CREATE)
+    @PostMapping("/create")
     public String create() {
-        Set<Product> cart = (Set<Product>) session.getAttribute("cart");
-        if (!productService.checkStock(cart)) {
-            return "products-quantity-error";
-        }
-        Payment payment = paymentService.create(Payment.builder().build());
+        cart = (Set<Product>) session.getAttribute("cart");
+        Double total = cartService.totalAmountForPayment(cart);
+        Payment payment = paymentFacade.createPayment(cart, total);
+
         session.setAttribute("payment", payment);
         session.setAttribute("date", paymentService.dateFormatter(payment.getDate()));
+
         return itemController.create();
     }
 
-
-    @GetMapping(PAGE_PATH)
-    public String findAll(Model model, @PathVariable(PAGE_NUMBER) int currentPage) {
-        Page<Payment> page = paymentService.findPage(currentPage);
-        model.addAttribute(CURRENT_PAGE, currentPage);
-        model.addAttribute(TOTAL_PAGES, page.getTotalPages());
-        model.addAttribute(TOTAL_ITEMS, page.getTotalElements());
-        model.addAttribute("allPayments", page.getContent());
+    @GetMapping("/page/{pageNumber}")
+    public String findAll(Model model, @PathVariable("pageNumber") int currentPage) {
+        paymentFacade.showPage(model, currentPage);
         return "payments";
     }
 
@@ -66,11 +57,10 @@ public class PaymentController {
         return findAll(model, 1);
     }
 
-    @DeleteMapping(PATH_ID)
+    @DeleteMapping("/{id}")
     public String deleteById(@PathVariable(value = ID) Long id) {
         paymentService.deleteById(id);
         return "redirect:/payments";
     }
-
 
 }

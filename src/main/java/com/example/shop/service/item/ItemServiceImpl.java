@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
-import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
@@ -25,26 +24,27 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemJpaRepository itemJpaRepository;
     private ItemRepository itemRepository;
-    private HttpSession session;
 
 
     @Override
     @Transactional
     public Item create(Item item) {
-        item.setPayment(getPayment(session));
         return itemJpaRepository.save(item);
     }
 
     @Override
-    public List<Item> createForList(List<Item> products) {
-        return products.stream()
+    public List<Item> createForList(List<Item> items) {
+        return items.stream()
                 .map(this::create)
                 .toList();
     }
 
     @Override
-    public Payment getPayment(HttpSession session) {
-        return (Payment) session.getAttribute("payment");
+    public List<Item> setPayment(List<Item> items, Payment payment) {
+        for (Item item : items) {
+            item.setPayment(payment);
+        }
+        return items;
     }
 
     @Override

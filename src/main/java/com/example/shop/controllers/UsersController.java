@@ -3,7 +3,6 @@ package com.example.shop.controllers;
 import com.example.shop.entities.User;
 import com.example.shop.service.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +15,9 @@ public class UsersController {
 
     private UserService userService;
 
-    @GetMapping(PAGE_PATH)
-    public String findAll(Model model, @PathVariable(PAGE_NUMBER) int currentPage) {
-        Page<User> page = userService.findPage(currentPage);
-
-        model.addAttribute(CURRENT_PAGE, currentPage);
-        model.addAttribute(TOTAL_PAGES, page.getTotalPages());
-        model.addAttribute(TOTAL_ITEMS, page.getTotalElements());
-        model.addAttribute("users", page.getContent());
-
+    @GetMapping("/page/{pageNumber}")
+    public String findAll(Model model, @PathVariable("pageNumber") int currentPage) {
+        userService.showPage(model, currentPage);
         return "users";
     }
 
@@ -33,21 +26,21 @@ public class UsersController {
         return findAll(model, 1);
     }
 
-    @GetMapping(PATH_ID)
+    @GetMapping("/{id}")
     public User findById(@PathVariable(value = ID) Long id) {
         return userService.findById(id);
     }
 
-    @DeleteMapping(PATH_ID)
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable(value = ID) Long id) {
         userService.deleteById(id);
-        return REDIRECT_TO_USERS_PAGE;
+        return "redirect:/users";
     }
 
     @GetMapping("/{userName}")
     public String findByUserName(@PathVariable(value = "userName") String userName) {
         userService.findByUserName(userName);
-        return REDIRECT_TO_USERS_PAGE;
+        return "redirect:/users";
     }
 
 }

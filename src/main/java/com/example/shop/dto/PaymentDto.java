@@ -12,5 +12,4 @@ public class PaymentDto {
     @NotNull
     private Double amount;
     private LocalDateTime date;
-
 }

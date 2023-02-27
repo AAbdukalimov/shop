@@ -14,7 +14,7 @@
     <div class="h5"></div>
     <table class="table">
         <thead>
-        <tr>
+        <tr style="color: darkgray">
             <th scope="col">Id</th>
             <th scope="col">Item name</th>
             <th scope="col">Item price</th>
@@ -30,15 +30,15 @@
         </thead>
         <tbody>
         <tr th:block th:each="item : ${pageItems}">
-            <td th:text="${item.Id}"></td>
-            <td th:text="${item.getProduct().getName()}"></td>
-            <td th:text="${item.getProduct().getPrice()}"></td>
-            <td th:text="${item.quantity}"></td>
-            <td th:text="${item.amount}"></td>
-            <td th:text="${item.getPayment().getDate()}"></td>
-            <td th:text="${item.getPayment().getId()}"></td>
-            <td th:text="${item.getPayment().getUser().getUserName()}"></td>
-            <td th:text="${item.getPayment().getUser().getId()}"></td>
+            <td><b><span th:text="${item.Id}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getProduct().getName()}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getProduct().getPrice()}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.quantity}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.amount}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getPayment().getDate()}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getPayment().getId()}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getPayment().getUser().getUserName()}" style="color: cornflowerblue"></span></b></td>
+            <td><b><span th:text="${item.getPayment().getUser().getId()}" style="color: cornflowerblue"></span></b></td>
             <td>
                 <a th:href="@{/items/{id}/edit-item(id=${item.Id})}"
                    class="btn btn-success"
@@ -60,31 +60,41 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <b> Total items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]] </b>
-            &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-            <b>  <li class="page-item">
+            &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+            <b>
+                <li class="page-item">
 
-                <a class="page-link" th:if="${currentPage > 1}" th:href="@{/items/page/1}">First</a>
-                <span th:unless="${currentPage > 1}">First</span>    &nbsp; &nbsp;
-            </li></b>
-            <b><li class="page-item">
-                <a th:if="${currentPage > 1}" th:href="@{'/items/page/' + ${currentPage - 1}}">Previous</a>
-                <span th:unless="${currentPage > 1}">Previous</span>    &nbsp; &nbsp;
-            </li></b>
-            <b><li class="page-item">
+                    <a class="page-link" th:if="${currentPage > 1}" th:href="@{/items/page/1}">First</a>
+                    <span th:unless="${currentPage > 1}">First</span> &nbsp; &nbsp;
+                </li>
+            </b>
+            <b>
+                <li class="page-item">
+                    <a th:if="${currentPage > 1}" th:href="@{'/items/page/' + ${currentPage - 1}}">Previous</a>
+                    <span th:unless="${currentPage > 1}">Previous</span> &nbsp; &nbsp;
+                </li>
+            </b>
+            <b>
+                <li class="page-item">
                  <span th:each="i: ${#numbers.sequence(1, totalPages)}">
         <a th:href="@{'/items/page/' + ${i}}">[[${i}]]</a>
         &nbsp; &nbsp;
     </span>
-            </li></b>
-            <b><li class="page-item">
-                <a th:if="${currentPage < totalPages}" th:href="@{'/items/page/' + ${currentPage + 1}}">Next</a>
-                <span th:unless="${currentPage < totalPages}">Next</span>   &nbsp; &nbsp;
-            </li></b>
+                </li>
+            </b>
+            <b>
+                <li class="page-item">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/items/page/' + ${currentPage + 1}}">Next</a>
+                    <span th:unless="${currentPage < totalPages}">Next</span> &nbsp; &nbsp;
+                </li>
+            </b>
 
-            <b><li class="page-item">
-                <a th:if="${currentPage < totalPages}" th:href="@{'/items/page/' + ${totalPages}}">Last</a>
-                <span th:unless="${currentPage < totalPages}">Last</span>
-            </li></b>
+            <b>
+                <li class="page-item">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/items/page/' + ${totalPages}}">Last</a>
+                    <span th:unless="${currentPage < totalPages}">Last</span>
+                </li>
+            </b>
         </ul>
     </nav>
 </div>
