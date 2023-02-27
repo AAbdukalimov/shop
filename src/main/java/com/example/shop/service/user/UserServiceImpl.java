@@ -16,8 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.webjars.NotFoundException;
 import java.util.List;
+
+import static com.example.shop.util.Constants.CURRENT_PAGE;
+import static com.example.shop.util.Constants.TOTAL_ITEMS;
+import static com.example.shop.util.Constants.TOTAL_PAGES;
 
 
 @Slf4j
@@ -102,6 +107,15 @@ public class UserServiceImpl implements UserService {
     public Page<User> findPage(int currentPage) {
         Pageable pageable = PageRequest.of(currentPage - 1, 5);
         return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public void showPage(Model model, int currentPage) {
+        Page<User> page = findPage(currentPage);
+        model.addAttribute(CURRENT_PAGE, currentPage);
+        model.addAttribute(TOTAL_PAGES, page.getTotalPages());
+        model.addAttribute(TOTAL_ITEMS, page.getTotalElements());
+        model.addAttribute("users", page.getContent());
     }
 
 }

@@ -15,7 +15,7 @@ public interface ItemService {
 
     Item create(Item item);
     List<Item> createForList(List<Item> items);
-    Payment getPayment(HttpSession session);
+    List<Item>setPayment(List<Item>items, Payment payment);
     List<Item> findAll();
     Item findById(Long id);
     Item update(Item item);

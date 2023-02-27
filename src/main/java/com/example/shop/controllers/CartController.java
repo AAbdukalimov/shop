@@ -4,6 +4,7 @@ import com.example.shop.entities.Product;
 import com.example.shop.service.cart.CartService;
 import com.example.shop.service.product.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.util.Set;
 import static com.example.shop.util.Constants.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/carts")
 @AllArgsConstructor
@@ -31,44 +33,44 @@ public class CartController {
 
     @GetMapping("/add-to-cart/{id}")
     public String addToCart(@PathVariable(value = ID) Long id) {
-        cartService.addToCart(productService.findById(id));
-        cart = (Set<Product>) session.getAttribute("cart");
-        cartService.findAll();
-        session.setAttribute("total", cartService.totalAmountForPayment(cart));
+        session.setAttribute("cart", cart);
+        cartService.addToCart(productService.findById(id), cart);
+        Double totalAmountForPayment = cartService.totalAmountForPayment(cartService.findAll(cart));
+        session.setAttribute("total", totalAmountForPayment);
+
         return "redirect:/index";
     }
 
     @GetMapping()
     public String findAll(Model model) {
-        model.addAttribute("cart", cart);
-        model.addAttribute("formattedTotal", cartService.formattedTotalAmountForPayment(cart));
+        cartService.modelViewForCart(model, cart);
         return "cart";
     }
 
-    @PatchMapping(PATH_ID)
+    @PatchMapping("/{id}")
     public String update(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "edit-cart-product";
         }
-        cartService.update(product);
-        return REDIRECT_TO_CART;
+        cartService.update(product, cart);
+        return "redirect:/carts";
     }
 
     @GetMapping("/{id}/edit-cart-product")
     public String edit(Model model, @PathVariable(value = ID) Long id) {
-        model.addAttribute("product", cartService.findById(id));
+        model.addAttribute("product", cartService.findById(id, cart));
         return "edit-cart-product";
     }
 
-    @DeleteMapping(PATH_ID)
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable(value = ID) Long id) {
-        cartService.deleteById(id);
-        return REDIRECT_TO_CART;
+        cartService.deleteById(id, cart);
+        return "redirect:/carts";
     }
 
     @GetMapping("/resetCart")
     public void resetCart() {
-        cartService.resetCart();
+        cartService.resetCart(cart);
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.shop.service.product;
 import com.example.shop.dto.ProductDto;
 import com.example.shop.entities.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Set;
@@ -30,5 +31,6 @@ public interface ProductService {
     Boolean checkStock(Set<Product> cartProducts);
 
     List<Product> productsStockAdjustments(Set<Product> cartProducts);
+    void showPage(Model model, int currentPage);
 
 }

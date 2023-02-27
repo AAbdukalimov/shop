@@ -16,14 +16,14 @@ public class RegistrationRequest {
     @Size(min = 2, max = 30, message = "Last name should be between 2 to 30 characters")
     String lastName;
 
-    @Pattern(regexp = "^[a-zA-Z\\d._-]{3,18}$",
+    @Pattern(regexp = "^[a-zA-Z\\d._-]{5,18}$",
             message = """
                     Username requirements:\s
                     Username consists of alphanumeric characters (a-zA-Z0-9), lowercase, or uppercase.
                     Username allowed of the dot (.), underscore (_), and hyphen (-).
                     The dot (.), underscore (_), or hyphen (-) must not be the first or last character.
                     The dot (.), underscore (_), or hyphen (-) does not appear consecutively, e.g., java..regex
-                    The number of characters must be between 3 to 18.""")
+                    The number of characters must be between 5 to 18.""")
     String userName;
 
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",

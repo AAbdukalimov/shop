@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     @GetMapping
-    public String get(){
+    public String get() {
         return "admin";
     }
-
 
 }

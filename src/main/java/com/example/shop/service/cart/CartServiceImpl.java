@@ -1,14 +1,12 @@
 package com.example.shop.service.cart;
 
 import com.example.shop.entities.Product;
-import com.example.shop.repository.cart.CartJpaRepository;
-import com.example.shop.repository.cart.CartRepository;
 import com.example.shop.service.product.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.webjars.NotFoundException;
-import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 import java.util.Set;
 import static com.example.shop.util.Constants.*;
@@ -19,12 +17,10 @@ import static com.example.shop.util.Constants.*;
 public class CartServiceImpl implements CartService {
 
     private ProductService productService;
-    private HttpSession session;
-    private Set<Product> cart;
 
     @Override
-    public Product addToCart(Product product) {
-        for (Product p : findAll()) {
+    public Product addToCart(Product product, Set<Product> cart) {
+        for (Product p : cart) {
             if (p.getId().equals(product.getId())) {
                 p.setQuantity(p.getQuantity() + ONE_PIECE);
                 return p;
@@ -34,23 +30,19 @@ public class CartServiceImpl implements CartService {
         productService.setAmount(product);
 
         cart.add(product);
-        session.setAttribute("cart", cart);
-
         return product;
     }
 
-
     @Override
-    public Set<Product> findAll() {
+    public Set<Product> findAll(Set<Product> cart) {
         for (Product product : cart) {
             productService.setAmount(product);
         }
-        session.setAttribute("cart", cart);
         return cart;
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product findById(Long id, Set<Product> cart) {
         return cart.stream()
                 .filter(product -> product.getId().equals(id))
                 .findAny()
@@ -59,7 +51,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Product update(Product product) {
+    public Product update(Product product, Set<Product> cart) {
         product.setAmount(product.getPrice() * product.getQuantity());
         cart.removeIf(p -> p.getId().equals(product.getId()));
         cart.add(product);
@@ -67,7 +59,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id, Set<Product> cart) {
         Product toDelete = cart.stream()
                 .filter(product -> product.getId().equals(id))
                 .findFirst()
@@ -96,16 +88,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Integer numberProductsOfCart() {
-        return findAll()
-                .stream()
-                .mapToInt(Product::getQuantity)
-                .sum();
-
+    public void modelViewForCart(Model model, Set<Product> cart) {
+        model.addAttribute("cart", cart);
+        model.addAttribute("formattedTotal", formattedTotalAmountForPayment(cart));
     }
 
     @Override
-    public void resetCart() {
+    public Integer numberProductsOfCart(Set<Product> cart) {
+        if (cart == null) {
+            return ZERO;
+        }
+        return cart.stream()
+                .mapToInt(Product::getQuantity)
+                .sum();
+    }
+
+    @Override
+    public void resetCart(Set<Product> cart) {
         cart.clear();
     }
 
